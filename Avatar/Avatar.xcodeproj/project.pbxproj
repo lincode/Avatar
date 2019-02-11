@@ -108,13 +108,13 @@
 			children = (
 				A3124DEB221167AC003E0A0C /* AppDelegate.swift */,
 				A3124E182211CBBF003E0A0C /* Pig.swift */,
-				A3124DED221167AC003E0A0C /* art.scnassets */,
 				A3124DEF221167AC003E0A0C /* CaptureViewController.swift */,
+				A3124E162211CA58003E0A0C /* CapturePhotoUtils.swift */,
+				A3124DED221167AC003E0A0C /* art.scnassets */,
 				A3124DF1221167AC003E0A0C /* Main.storyboard */,
 				A3124DF4221167AE003E0A0C /* Assets.xcassets */,
 				A3124DF6221167AE003E0A0C /* LaunchScreen.storyboard */,
 				A3124DF9221167AE003E0A0C /* Info.plist */,
-				A3124E162211CA58003E0A0C /* CapturePhotoUtils.swift */,
 			);
 			path = Avatar;
 			sourceTree = "<group>";

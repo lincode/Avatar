@@ -14,6 +14,10 @@ import AKPickerView
 import SceneKitVideoRecorder
 import Photos
 
+enum CaptureMode: String, CaseIterable {
+  case photo = "照片", video = "视频", emoji = "表情包"
+}
+
 class CaptureViewController: UIViewController {
 
   @IBOutlet var selfieSceneView: ARSCNView!
@@ -21,8 +25,20 @@ class CaptureViewController: UIViewController {
 
   @IBOutlet var captureButton: KYShutterButton!
 
-  let titles = ["视频", "照片", "表情包"]
   @IBOutlet var captureModePicker: AKPickerView!
+
+  var captureMode: CaptureMode = .photo {
+    didSet {
+      switch captureMode {
+      case .photo:
+        self.setCaptureButtonPhotoMode()
+      case .video:
+        self.setCaptureButtonVideoMode()
+      case .emoji:
+        self.setCaptureButtonEmojiMode()
+      }
+    }
+  }
 
   var recorder: SceneKitVideoRecorder?
 
@@ -56,37 +72,38 @@ class CaptureViewController: UIViewController {
 
   @objc
   func didTapButton(_ sender: KYShutterButton) {
-    switch sender.buttonState {
-    case .normal:
-      sender.buttonState = .recording
-      self.recorder?.startWriting().onSuccess {
-        print("Recording Started")
+
+    switch captureMode {
+    case .photo:
+      if let photo = CapturePhotoUtils.sharedInstance.image(with: avatarSceneView) {
+        CapturePhotoUtils.sharedInstance.saveImageToPhotoAlbum(image: photo)
       }
-    case .recording:
-      sender.buttonState = .normal
-      self.recorder?.finishWriting().onSuccess { [weak self] url in
-        print("Recording Finished", url)
-        self?.checkAuthorizationAndPresentActivityController(toShare: url, using: self!)
+    case .video:
+      if sender.buttonState == .normal {
+        sender.buttonState = .recording
+        self.recorder?.startWriting().onSuccess {
+          print("Recording Started")
+        }
+      } else if sender.buttonState == .recording {
+        sender.buttonState = .normal
+        self.recorder?.finishWriting().onSuccess { [weak self] url in
+          print("Recording Finished", url)
+          self?.checkAuthorizationAndPresentActivityController(toShare: url, using: self!)
+        }
       }
+    case . emoji:
+      break
     }
   }
 
   //MARK: - ViewController configuration
   override var shouldAutorotate: Bool {
-    return true
+    return false
   }
     
   override var prefersStatusBarHidden: Bool {
-    return true
-  }
-    
-  override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-    if UIDevice.current.userInterfaceIdiom == .phone {
-        return .allButUpsideDown
-    } else {
-        return .all
-    }
-  }
+    return false
+  }    
 }
 
 private extension CaptureViewController {
@@ -100,6 +117,20 @@ private extension CaptureViewController {
   func setupAvatarSceneView() {
 
     let scene = SCNScene()
+
+    // create and add a light to the scene
+    let lightNode = SCNNode()
+    lightNode.light = SCNLight()
+    lightNode.light!.type = .omni
+    lightNode.position = SCNVector3(x: 0, y: 15, z: 15)
+    scene.rootNode.addChildNode(lightNode)
+
+    // create and add an ambient light to the scene
+    let ambientLightNode = SCNNode()
+    ambientLightNode.light = SCNLight()
+    ambientLightNode.light!.type = .ambient
+    ambientLightNode.light!.color = UIColor.darkGray
+    scene.rootNode.addChildNode(ambientLightNode)
 
     avatar = Pig()
     scene.rootNode.addChildNode(avatar)
@@ -119,8 +150,7 @@ private extension CaptureViewController {
   }
 
   func setupCaptureButton() {
-    captureButton.arcColor = UIColor.black
-    captureButton.buttonColor = UIColor.red
+    captureMode = .photo
     captureButton.addTarget(self,
                             action: #selector(didTapButton(_:)),
                             for: .touchUpInside)
@@ -197,11 +227,11 @@ extension CaptureViewController: ARSCNViewDelegate, ARSessionDelegate {
 extension CaptureViewController: AKPickerViewDataSource {
 
   func numberOfItems(in pickerView: AKPickerView!) -> UInt {
-    return UInt(titles.count)
+    return UInt(CaptureMode.allCases.count)
   }
 
   func pickerView(_ pickerView: AKPickerView!, titleForItem item: Int) -> String! {
-    return titles[item]
+    return CaptureMode.allCases[item].rawValue
   }
 
 }
@@ -225,12 +255,6 @@ extension CaptureViewController: AKPickerViewDelegate {
   }
 
   func pickerView(_ pickerView: AKPickerView!, didSelectItem item: Int) {
-    if item == 0 {
-      setCaptureButtonVideoMode()
-    } else if item == 1 {
-      setCaptureButtonPhotoMode()
-    } else if item == 2 {
-      setCaptureButtonEmojiMode()
-    }
+    captureMode = CaptureMode.allCases[item]
   }
 }
