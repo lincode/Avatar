@@ -1,0 +1,41 @@
+PODS:
+  - AKPickerView (0.2.7)
+  - BrightFutures (7.0.0):
+    - Result (~> 4.0.0)
+  - KYShutterButton (2.0.1)
+  - Result (4.0.1)
+  - SceneKitVideoRecorder (1.5.1):
+    - BrightFutures
+
+DEPENDENCIES:
+  - AKPickerView
+  - KYShutterButton
+  - SceneKitVideoRecorder (from `https://github.com/svtek/SceneKitVideoRecorder.git`, branch `swift4`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AKPickerView
+    - BrightFutures
+    - KYShutterButton
+    - Result
+
+EXTERNAL SOURCES:
+  SceneKitVideoRecorder:
+    :branch: swift4
+    :git: https://github.com/svtek/SceneKitVideoRecorder.git
+
+CHECKOUT OPTIONS:
+  SceneKitVideoRecorder:
+    :commit: 71e239324b2a0366ab3a499e076f70ced50d7a70
+    :git: https://github.com/svtek/SceneKitVideoRecorder.git
+
+SPEC CHECKSUMS:
+  AKPickerView: 125372e36fcc372216127600a541f14dcdbb7993
+  BrightFutures: 7d7436e937dfc83d814c11920f157fc2a53f5bd5
+  KYShutterButton: 794612eedc2ee75114326f7394703f0f49bf0882
+  Result: a6e784bebf48b471d59cddc1adb81f41f678c487
+  SceneKitVideoRecorder: a8b42606f488c2c8cab6be622201d5036c1bd12d
+
+PODFILE CHECKSUM: 47140b774110250c1d88348a1c2abeffd7cee6e9
+
+COCOAPODS: 1.6.0
