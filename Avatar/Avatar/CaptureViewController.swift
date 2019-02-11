@@ -26,34 +26,32 @@ class CaptureViewController: UIViewController {
 
   var recorder: SceneKitVideoRecorder?
 
+  var avatar: Pig!
+
   // MARK: - Life cycle
   override func viewDidLoad() {
     super.viewDidLoad()
 
+    setupSelfieSceneView()
     setupAvatarSceneView()
-
+    setupRecorder(sceneView: avatarSceneView)
     setupCaptureButton()
     setupCaptureModePicker()
-
-    recorder = try! SceneKitVideoRecorder(withARSCNView: avatarSceneView!)
-    recorder.
   }
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
-    let configuration = ARWorldTrackingConfiguration()
-
-    // Run the view's session
-    avatarSceneView.session.run(configuration)
-
+    let configuration = ARFaceTrackingConfiguration()
+    configuration.worldAlignment = .camera
+    selfieSceneView.session.run(configuration)
   }
 
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 
     // Pause the view's session
-    avatarSceneView.session.pause()
+    selfieSceneView.session.pause()
   }
 
   @objc
@@ -93,13 +91,31 @@ class CaptureViewController: UIViewController {
 
 private extension CaptureViewController {
 
+  func setupSelfieSceneView() {
+
+    selfieSceneView.delegate = self
+    selfieSceneView.session.delegate = self
+  }
+
   func setupAvatarSceneView() {
 
-    avatarSceneView.showsStatistics = true
+    let scene = SCNScene()
 
-    let scene = SCNScene(named: "art.scnassets/ship.scn")!
+    avatar = Pig()
+    scene.rootNode.addChildNode(avatar)
 
+    avatarSceneView.defaultCameraController.pointOfView?.position = SCNVector3(x: 0, y: 0, z: 15)
     avatarSceneView.scene = scene
+    avatarSceneView.allowsCameraControl = true
+    avatarSceneView.scene.background.contents = UIColor.lightGray
+
+    // Improve the performance
+    if let camera = avatarSceneView.pointOfView?.camera {
+      camera.wantsHDR = false
+      camera.wantsExposureAdaptation = false
+      camera.exposureOffset = -1
+      camera.minimumExposure = -1
+    }
   }
 
   func setupCaptureButton() {
@@ -108,7 +124,6 @@ private extension CaptureViewController {
     captureButton.addTarget(self,
                             action: #selector(didTapButton(_:)),
                             for: .touchUpInside)
-
   }
 
   func setupCaptureModePicker() {
@@ -121,6 +136,14 @@ private extension CaptureViewController {
     captureModePicker.interitemSpacing = 20
     captureModePicker.isMaskDisabled = false
     captureModePicker.reloadData()
+  }
+
+  func setupRecorder(sceneView: ARSCNView) {
+
+    var options = SceneKitVideoRecorder.Options.default
+    options.videoSize = avatarSceneView.frame.size
+    options.timeScale = 100
+    recorder = try! SceneKitVideoRecorder(withARSCNView: sceneView, options: options)
   }
 
   private func checkAuthorizationAndPresentActivityController(toShare data: Any, using presenter: UIViewController) {
@@ -148,6 +171,27 @@ private extension CaptureViewController {
 
 }
 
+//MARK: - ARSCNViewDelegate
+extension CaptureViewController: ARSCNViewDelegate, ARSessionDelegate {
+
+  func session(_ session: ARSession, didFailWithError error: Error) {
+    print("** didFailWithError")
+  }
+
+  func sessionWasInterrupted(_ session: ARSession) {
+    print("** sessionWasInterrupted")
+  }
+
+  func sessionInterruptionEnded(_ session: ARSession) {
+    print("** sessionInterruptionEnded")
+  }
+
+  func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
+    guard anchors.count > 0, let faceAnchor = anchors[0] as? ARFaceAnchor else { return }
+    avatar.update(withFaceAnchor: faceAnchor)
+  }
+
+}
 
 //MARK: - AKPickerViewDataSource
 extension CaptureViewController: AKPickerViewDataSource {
