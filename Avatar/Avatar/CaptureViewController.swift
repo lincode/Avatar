@@ -23,8 +23,9 @@ class CaptureViewController: UIViewController {
   @IBOutlet var selfieSceneView: ARSCNView!
   @IBOutlet var avatarSceneView: ARSCNView!
 
+  @IBOutlet var backgroundChooseButton: UIButton!
+  @IBOutlet var avatarChooseButton: UIButton!
   @IBOutlet var captureButton: KYShutterButton!
-
   @IBOutlet var captureModePicker: AKPickerView!
 
   var captureMode: CaptureMode = .photo {
@@ -53,6 +54,7 @@ class CaptureViewController: UIViewController {
     setupRecorder(sceneView: avatarSceneView)
     setupCaptureButton()
     setupCaptureModePicker()
+
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -70,13 +72,15 @@ class CaptureViewController: UIViewController {
     selfieSceneView.session.pause()
   }
 
+  // MARK: - Actions
   @objc
   func didTapButton(_ sender: KYShutterButton) {
 
     switch captureMode {
     case .photo:
       if let photo = CapturePhotoUtils.sharedInstance.image(with: avatarSceneView) {
-        CapturePhotoUtils.sharedInstance.saveImageToPhotoAlbum(image: photo)
+
+        gotoCapturedPhotoViewController(withImage: photo)
       }
     case .video:
       if sender.buttonState == .normal {
@@ -94,6 +98,13 @@ class CaptureViewController: UIViewController {
     case . emoji:
       break
     }
+  }
+
+  func gotoCapturedPhotoViewController(withImage image: UIImage) {
+
+    let vc = CapturedPhotoViewController(nibName: "CapturedPhotoViewController", bundle: nil)
+    vc.image = image
+    self.present(vc, animated: false, completion: nil)
   }
 
   //MARK: - ViewController configuration
@@ -138,7 +149,7 @@ private extension CaptureViewController {
     avatarSceneView.defaultCameraController.pointOfView?.position = SCNVector3(x: 0, y: 0, z: 15)
     avatarSceneView.scene = scene
     avatarSceneView.allowsCameraControl = true
-    avatarSceneView.scene.background.contents = UIColor.lightGray
+    avatarSceneView.scene.background.contents = UIColor.white
 
     // Improve the performance
     if let camera = avatarSceneView.pointOfView?.camera {
@@ -160,8 +171,8 @@ private extension CaptureViewController {
     captureModePicker.delegate = self
     captureModePicker.dataSource = self
 
-    captureModePicker.font = UIFont(name: "HelveticaNeue-Light", size: 16)!
-    captureModePicker.highlightedFont = UIFont(name: "HelveticaNeue", size: 16)!
+    captureModePicker.font = UIFont(name: "HelveticaNeue-Light", size: 20)!
+    captureModePicker.highlightedFont = UIFont(name: "HelveticaNeue", size: 20)!
     captureModePicker.pickerViewStyle = .styleFlat
     captureModePicker.interitemSpacing = 20
     captureModePicker.isMaskDisabled = false

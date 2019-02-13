@@ -23,7 +23,6 @@ class CapturePhotoUtils: NSObject {
   }
 
   func saveImageToPhotoAlbum(image: UIImage) {
-    UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
   }
 
   func topViewController() -> UIViewController? {
@@ -34,20 +33,6 @@ class CapturePhotoUtils: NSObject {
       return topViewController
     }
     return nil
-  }
-
-  @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
-    let topViewController = self.topViewController()
-    if let error = error {
-      // we got back an error!
-      let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
-      ac.addAction(UIAlertAction(title: "OK", style: .default))
-      topViewController?.present(ac, animated: true)
-    } else {
-      let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .alert)
-      ac.addAction(UIAlertAction(title: "OK", style: .default))
-      topViewController?.present(ac, animated: true)
-    }
   }
 
 }

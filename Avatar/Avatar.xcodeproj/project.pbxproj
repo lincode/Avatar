@@ -17,6 +17,8 @@
 		A3124E03221167AF003E0A0C /* AvatarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3124E02221167AF003E0A0C /* AvatarTests.swift */; };
 		A3124E172211CA58003E0A0C /* CapturePhotoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3124E162211CA58003E0A0C /* CapturePhotoUtils.swift */; };
 		A3124E192211CBBF003E0A0C /* Pig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3124E182211CBBF003E0A0C /* Pig.swift */; };
+		A3689AC82213F3020063AD3E /* CapturedPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3689AC72213F3020063AD3E /* CapturedPhotoViewController.swift */; };
+		A3689ACA221409630063AD3E /* CapturedPhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3689AC9221409630063AD3E /* CapturedPhotoViewController.xib */; };
 		CF882D6488186189F67E9C6B /* Pods_Avatar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC19641FF26798B90CA9DE5D /* Pods_Avatar.framework */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +49,8 @@
 		A3124E04221167AF003E0A0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A3124E162211CA58003E0A0C /* CapturePhotoUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePhotoUtils.swift; sourceTree = "<group>"; };
 		A3124E182211CBBF003E0A0C /* Pig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pig.swift; sourceTree = "<group>"; };
+		A3689AC72213F3020063AD3E /* CapturedPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturedPhotoViewController.swift; sourceTree = "<group>"; };
+		A3689AC9221409630063AD3E /* CapturedPhotoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CapturedPhotoViewController.xib; sourceTree = "<group>"; };
 		AC19641FF26798B90CA9DE5D /* Pods_Avatar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Avatar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDD50AA7541C320F8CF9DC0F /* Pods-AvatarTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvatarTests.release.xcconfig"; path = "Target Support Files/Pods-AvatarTests/Pods-AvatarTests.release.xcconfig"; sourceTree = "<group>"; };
 		EA7E8C5558EFB632E9EB53E8 /* Pods_AvatarTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvatarTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				A3124DEB221167AC003E0A0C /* AppDelegate.swift */,
+				A3689AC62213F2BD0063AD3E /* Capture */,
 				A3124E182211CBBF003E0A0C /* Pig.swift */,
 				A3124DEF221167AC003E0A0C /* CaptureViewController.swift */,
 				A3124E162211CA58003E0A0C /* CapturePhotoUtils.swift */,
@@ -126,6 +131,15 @@
 				A3124E04221167AF003E0A0C /* Info.plist */,
 			);
 			path = AvatarTests;
+			sourceTree = "<group>";
+		};
+		A3689AC62213F2BD0063AD3E /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				A3689AC72213F3020063AD3E /* CapturedPhotoViewController.swift */,
+				A3689AC9221409630063AD3E /* CapturedPhotoViewController.xib */,
+			);
+			path = Capture;
 			sourceTree = "<group>";
 		};
 		F8F4ECEAB39778394515A11D /* Frameworks */ = {
@@ -225,6 +239,7 @@
 				A3124DF8221167AE003E0A0C /* LaunchScreen.storyboard in Resources */,
 				A3124DF5221167AE003E0A0C /* Assets.xcassets in Resources */,
 				A3124DF3221167AC003E0A0C /* Main.storyboard in Resources */,
+				A3689ACA221409630063AD3E /* CapturedPhotoViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +336,7 @@
 			files = (
 				A3124E192211CBBF003E0A0C /* Pig.swift in Sources */,
 				A3124E172211CA58003E0A0C /* CapturePhotoUtils.swift in Sources */,
+				A3689AC82213F3020063AD3E /* CapturedPhotoViewController.swift in Sources */,
 				A3124DF0221167AC003E0A0C /* CaptureViewController.swift in Sources */,
 				A3124DEC221167AC003E0A0C /* AppDelegate.swift in Sources */,
 			);
